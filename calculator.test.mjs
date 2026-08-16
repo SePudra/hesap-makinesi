@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import calculator from './calculator.js';
 
-const { calculate, initialState, press } = calculator;
+import { calculate, initialState, press, applyFn } from './calculator.js';
 
 test('index.html doğrudan dosya olarak açılabilir', () => {
   const html = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
@@ -25,6 +25,34 @@ test('iki sayıyı çarpar', () => {
 
 test('iki sayıyı böler', () => {
   assert.equal(calculate(9, '÷', 3), 3);
+});
+
+test('üst alma yapar', () => {
+  assert.equal(calculate(2, 'x^y', 10), 1024);
+});
+
+test('karekök alır', () => {
+  assert.equal(applyFn('√', { display: '9' }), 3);
+});
+
+test('negatif karekökü reddeder', () => {
+  assert.throws(() => applyFn('√', { display: '-4' }), /Negatif karekök/);
+});
+
+test('sinüs derece cinsinden hesaplar', () => {
+  assert.equal(applyFn('sin', { display: '90' }), 1);
+});
+
+test('logaritma alır', () => {
+  assert.equal(applyFn('log', { display: '100' }), 2);
+});
+
+test('işaret değiştirir', () => {
+  assert.equal(applyFn('±', { display: '5' }), -5);
+});
+
+test('pi sayısını döndürür', () => {
+  assert.equal(applyFn('π', { display: '0' }), Math.PI);
 });
 
 test('sıfıra bölmeyi reddeder', () => {

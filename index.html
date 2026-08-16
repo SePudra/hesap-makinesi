@@ -8,8 +8,8 @@
     :root {
       color-scheme: dark;
       font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-      background: #0a0f1a;
-      color: #e8eefc;
+      background: #1a1407;
+      color: #fdf6e3;
     }
 
     * { box-sizing: border-box; }
@@ -20,8 +20,8 @@
       display: grid;
       place-items: center;
       padding: 24px;
-      background-color: #0a0f1a;
-      background-image: radial-gradient(#1a2336 0.7px, transparent 0.7px);
+      background-color: #1a1407;
+      background-image: radial-gradient(#3a2e10 0.7px, transparent 0.7px);
       background-size: 18px 18px;
     }
 
@@ -31,9 +31,9 @@
 
     .calculator {
       overflow: hidden;
-      border: 1px solid #2d3a56;
+      border: 1px solid #5c4a12;
       border-radius: 24px;
-      background: #111a2e;
+      background: #221a08;
       box-shadow: 0 24px 70px rgb(0 0 0 / 45%);
     }
 
@@ -44,16 +44,17 @@
       justify-content: end;
       overflow: hidden;
       padding: 28px 24px 22px;
-      border-bottom: 1px solid #2d3a56;
+      border-bottom: 1px solid #5c4a12;
       font-size: clamp(42px, 13vw, 62px);
       font-weight: 520;
       font-variant-numeric: tabular-nums;
       letter-spacing: -0.055em;
       white-space: nowrap;
+      color: #fde047;
     }
 
     .display[data-error="true"] {
-      color: #ff9b88;
+      color: #fca5a5;
       font-size: 25px;
       letter-spacing: -0.02em;
     }
@@ -62,33 +63,44 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1px;
-      background: #2d3a56;
+      background: #5c4a12;
+    }
+
+    .sci[hidden] { display: none; }
+
+    .sci {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: #5c4a12;
+      border-bottom: 1px solid #5c4a12;
     }
 
     button {
       min-height: 70px;
       border: 0;
-      background: #162034;
-      color: inherit;
+      background: #2e2409;
+      color: #fdf6e3;
       font: inherit;
       font-size: 21px;
       cursor: pointer;
       transition: background-color 120ms ease, color 120ms ease;
     }
 
-    button:hover { background: #1d2b45; }
-    button:active { background: #253858; }
-    button:focus-visible { outline: 3px solid #3b82f6; outline-offset: -4px; }
+    button:hover { background: #3d3010; }
+    button:active { background: #4d3d14; }
+    button:focus-visible { outline: 3px solid #fde047; outline-offset: -4px; }
 
-    .utility { color: #94a3b8; }
-    .operator { color: #60a5fa; font-weight: 700; }
-    .equals { grid-row: span 2; background: #3b82f6; color: #0a0f1a; font-weight: 800; }
-    .equals:hover { background: #60a5fa; }
+    .utility { color: #d4c089; }
+    .operator { color: #fde047; font-weight: 700; }
+    .sci-fn { color: #fcd34d; font-size: 18px; }
+    .equals { grid-row: span 2; background: #fde047; color: #1a1407; font-weight: 800; }
+    .equals:hover { background: #fef08a; }
     .zero { grid-column: span 2; }
 
     .hint {
       margin: 14px 2px 0;
-      color: #64748b;
+      color: #a8924a;
       font-size: 12px;
       text-align: center;
     }
@@ -108,32 +120,49 @@
   <main>
     <section class="calculator" aria-label="Hesap makinesi">
       <output class="display" data-display data-error="false" aria-live="polite">0</output>
+      <div class="sci" data-sci hidden>
+        <button class="sci-fn" data-key="sin" aria-label="Sinüs">sin</button>
+        <button class="sci-fn" data-key="cos" aria-label="Kosinüs">cos</button>
+        <button class="sci-fn" data-key="tan" aria-label="Tanjant">tan</button>
+        <button class="sci-fn" data-key="√" aria-label="Karekök">√</button>
+
+        <button class="sci-fn" data-key="log" aria-label="10 tabanında logaritma">log</button>
+        <button class="sci-fn" data-key="ln" aria-label="Doğal logaritma">ln</button>
+        <button class="sci-fn" data-key="x^y" aria-label="Üs alma">xʸ</button>
+        <button class="sci-fn" data-key="π" aria-label="Pi sayısı">π</button>
+
+        <button class="sci-fn" data-key="e" aria-label="Euler sayısı">e</button>
+        <button class="sci-fn" data-key="%" aria-label="Yüzde">%</button>
+        <button class="sci-fn" data-key="±" aria-label="İşaret değiştir">±</button>
+        <button class="sci-fn" data-key="SCI" aria-label="Bilimsel modu kapat">SCI✕</button>
+      </div>
       <div class="keys" data-keys>
+        <button class="utility" data-key="SCI" aria-label="Bilimsel modu aç">SCI</button>
         <button class="utility" data-key="C" aria-label="Temizle">C</button>
         <button class="utility" data-key="⌫" aria-label="Son basamağı sil">←</button>
         <button class="operator" data-key="÷" aria-label="Böl">÷</button>
-        <button class="operator" data-key="×" aria-label="Çarp">×</button>
 
         <button data-key="7">7</button>
         <button data-key="8">8</button>
         <button data-key="9">9</button>
-        <button class="operator" data-key="-" aria-label="Çıkar">−</button>
+        <button class="operator" data-key="×" aria-label="Çarp">×</button>
 
         <button data-key="4">4</button>
         <button data-key="5">5</button>
         <button data-key="6">6</button>
-        <button class="operator" data-key="+" aria-label="Topla">+</button>
+        <button class="operator" data-key="-" aria-label="Çıkar">−</button>
 
         <button data-key="1">1</button>
         <button data-key="2">2</button>
         <button data-key="3">3</button>
-        <button class="equals" data-key="=" aria-label="Sonucu göster">=</button>
+        <button class="operator" data-key="+" aria-label="Topla">+</button>
 
         <button class="zero" data-key="0">0</button>
         <button data-key="." aria-label="Ondalık ayırıcı">.</button>
+        <button class="equals" data-key="=" aria-label="Sonucu göster">=</button>
       </div>
     </section>
-    <p class="hint">Klavye desteklenir · Esc temizler</p>
+    <p class="hint">Klavye desteklenir · Esc temizler · SCI bilimsel mod</p>
   </main>
   <script src="./calculator.js"></script>
 </body>
