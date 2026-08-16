@@ -3,234 +3,445 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Hesap Makinesi</title>
+  <meta name="theme-color" content="#23282b">
+  <title>SC-01 Bilimsel Hesap Makinesi</title>
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #0b0d12;
-      --bg-glow: #141821;
-      --panel: #151922;
-      --panel-2: #1b212d;
-      --key: #1e2531;
-      --key-hover: #283041;
-      --key-active: #323c4f;
-      --line: #2a3340;
-      --text: #f4f7fb;
-      --muted: #8b97a8;
-      --accent: #f5c518;
-      --accent-soft: #f5c51822;
-      --accent-press: #ffd84d;
-      --operator: #ffb454;
-      --danger: #ff6b6b;
-      --radius: 22px;
-      --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color-scheme: light;
+      --bench: #d7d3c8;
+      --bench-line: rgba(44, 51, 51, 0.08);
+      --shell: #252a2c;
+      --shell-edge: #111516;
+      --panel: #303638;
+      --panel-high: #3b4244;
+      --screen: #100f0c;
+      --screen-edge: #050504;
+      --phosphor: #ff7a1a;
+      --phosphor-bright: #ff9a43;
+      --phosphor-dim: #7d3510;
+      --phosphor-ghost: rgba(255, 122, 26, 0.1);
+      --ink: #f0f2ed;
+      --ink-muted: #b7bfbd;
+      --key: #e3e0d7;
+      --key-top: #f6f4ed;
+      --key-ink: #202526;
+      --key-muted: #4e595a;
+      --operator: #c6d7d7;
+      --operator-top: #e1eded;
+      --rule: rgba(255, 255, 255, 0.13);
+      --focus: #74c7ff;
+      --danger: #ff6363;
+      --radius-shell: 18px;
+      --radius-key: 8px;
+      --font-ui: "DIN Alternate", "Bahnschrift", "Aptos", system-ui, sans-serif;
+      --font-data: "SFMono-Regular", "Cascadia Mono", "Roboto Mono", ui-monospace, monospace;
     }
 
     * { box-sizing: border-box; }
 
-    html, body { height: 100%; }
+    html { min-height: 100%; }
 
     body {
+      min-height: 100vh;
+      min-height: 100dvh;
       margin: 0;
       display: grid;
       place-items: center;
-      padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
-      font-family: var(--font);
-      color: var(--text);
-      background:
-        radial-gradient(1200px 600px at 50% -10%, var(--bg-glow), transparent 60%),
-        radial-gradient(800px 500px at 90% 110%, #1a1407, transparent 55%),
-        var(--bg);
+      padding: max(20px, env(safe-area-inset-top)) 14px max(20px, env(safe-area-inset-bottom));
+      color: var(--ink);
+      font-family: var(--font-ui);
+      background-color: var(--bench);
+      background-image:
+        linear-gradient(var(--bench-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--bench-line) 1px, transparent 1px),
+        radial-gradient(circle at 50% 12%, rgba(255,255,255,0.55), transparent 42%);
+      background-size: 20px 20px, 20px 20px, auto;
       -webkit-font-smoothing: antialiased;
     }
 
-    .calculator {
-      width: min(100%, 380px);
-      background: linear-gradient(180deg, var(--panel), var(--panel-2));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow:
-        0 1px 0 rgba(255,255,255,0.04) inset,
-        0 30px 80px -20px rgba(0,0,0,0.75);
+    ::selection { color: var(--screen); background: var(--phosphor-bright); }
+
+    main { width: min(100%, 430px); }
+
+    .instrument {
+      position: relative;
       overflow: hidden;
+      border: 1px solid var(--shell-edge);
+      border-radius: var(--radius-shell);
+      background:
+        linear-gradient(104deg, rgba(255,255,255,0.055), transparent 21%, rgba(255,255,255,0.025) 50%, transparent 78%),
+        var(--shell);
+      box-shadow:
+        0 2px 0 rgba(255,255,255,0.12) inset,
+        0 -2px 0 rgba(0,0,0,0.32) inset,
+        0 24px 54px -20px rgba(24, 28, 28, 0.48);
     }
 
+    .screw {
+      position: absolute;
+      z-index: 4;
+      width: 9px;
+      height: 9px;
+      border: 1px solid #0a0c0c;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8d9594, #343a3a 48%, #111414);
+      box-shadow: 0 1px 1px rgba(0,0,0,0.6);
+      pointer-events: none;
+    }
+    .screw::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 1px;
+      width: 5px;
+      height: 1px;
+      background: #141818;
+      transform: rotate(-26deg);
+    }
+    .screw:nth-of-type(1) { top: 12px; left: 12px; }
+    .screw:nth-of-type(2) { top: 12px; right: 12px; }
+    .screw:nth-of-type(3) { bottom: 12px; left: 12px; }
+    .screw:nth-of-type(4) { right: 12px; bottom: 12px; }
+
+    .identity {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 31px 11px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .model {
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .model strong {
+      color: #fff;
+      font-family: var(--font-data);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+    }
+
+    .model span,
+    .status {
+      color: var(--ink-muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .mode-light {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #707876;
+      box-shadow: 0 0 0 1px #121515;
+      transition: background-color 180ms ease-out, box-shadow 180ms ease-out;
+    }
+
+    .instrument:has(.sci[data-open="true"]) .mode-light {
+      background: var(--phosphor-bright);
+      box-shadow: 0 0 0 1px #121515, 0 0 10px rgba(255, 122, 26, 0.7);
+    }
+
+    .display-wrap { padding: 18px 24px 19px; }
+
     .display {
-      padding: 26px 24px 18px;
+      position: relative;
+      min-height: 128px;
+      overflow: hidden;
+      border: 1px solid var(--screen-edge);
+      border-radius: 9px;
+      padding: 21px 19px 17px;
       text-align: right;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(245,197,24,0.05), transparent);
+      background:
+        repeating-linear-gradient(90deg, transparent 0 5px, rgba(180, 109, 45, 0.035) 5px 6px),
+        linear-gradient(180deg, #080806, var(--screen));
+      box-shadow:
+        0 0 0 2px rgba(255,255,255,0.055),
+        0 5px 13px rgba(0,0,0,0.82) inset;
+    }
+
+    .display::before {
+      content: "888888888888";
+      position: absolute;
+      right: 18px;
+      bottom: 16px;
+      color: var(--phosphor-ghost);
+      font: 500 clamp(38px, 12vw, 58px)/1 var(--font-data);
+      letter-spacing: -0.045em;
+      white-space: nowrap;
+      pointer-events: none;
     }
 
     .expression {
-      min-height: 20px;
-      margin-bottom: 6px;
-      color: var(--muted);
-      font-size: 15px;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
+      position: relative;
+      z-index: 1;
+      min-height: 21px;
+      margin-bottom: 9px;
       overflow: hidden;
+      color: #c45a1f;
+      font: 500 14px/1.2 var(--font-data);
+      letter-spacing: 0.02em;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
+    .expression:empty::before { content: "DEG"; color: var(--phosphor-dim); }
 
     .result {
-      min-height: 64px;
-      font-size: clamp(40px, 12vw, 60px);
-      font-weight: 600;
-      line-height: 1.05;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.03em;
-      color: var(--accent);
-      white-space: nowrap;
+      position: relative;
+      z-index: 1;
+      display: block;
+      min-height: 58px;
       overflow-x: auto;
       overflow-y: hidden;
+      color: var(--phosphor-bright);
+      font: 500 clamp(38px, 12vw, 58px)/1 var(--font-data);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.045em;
+      text-shadow: 0 2px 9px rgba(255, 96, 12, 0.62);
+      white-space: nowrap;
       scrollbar-width: none;
     }
     .result::-webkit-scrollbar { display: none; }
-
     .result[data-error="true"] {
       color: var(--danger);
-      font-size: 22px;
-      font-weight: 500;
+      font-size: 19px;
       letter-spacing: 0;
-      word-break: break-all;
+      text-shadow: 0 2px 9px rgba(255, 65, 65, 0.42);
+      white-space: normal;
     }
 
-    .expression:empty { min-height: 0; margin: 0; }
+    .function-bank {
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid rgba(0,0,0,0.55);
+      background: #1d2223;
+    }
 
     .sci {
       display: grid;
       grid-template-rows: 0fr;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--line);
       overflow: hidden;
       opacity: 0;
-      transition: grid-template-rows 240ms ease, opacity 200ms ease;
+      transition: grid-template-rows 220ms cubic-bezier(.2,.8,.2,1), opacity 160ms ease-out;
     }
-
-    .sci > * {
+    .sci-grid {
       min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      overflow: hidden;
+      padding: 0 24px;
     }
-
+    .sci[data-open="true"] .sci-grid { padding-block: 14px 17px; }
     .sci[data-open="true"] {
       grid-template-rows: 1fr;
       opacity: 1;
     }
-
-    .sci button {
-      background: #181f2b;
-      color: var(--muted);
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .sci button:hover { background: #202938; }
+    .sci button:last-child { grid-column: span 2; }
 
     .keys {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--line);
+      gap: 9px;
+      padding: 17px 24px 24px;
+      background: var(--panel);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset;
     }
 
     button {
-      appearance: none;
-      border: 0;
+      min-height: 58px;
       margin: 0;
-      min-height: 68px;
-      background: var(--key);
-      color: var(--text);
-      font: inherit;
-      font-size: 22px;
-      font-weight: 500;
+      border: 1px solid #96988f;
+      border-radius: var(--radius-key);
+      color: var(--key-ink);
+      background: linear-gradient(180deg, var(--key-top), var(--key));
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.9) inset,
+        0 4px 0 #777a73,
+        0 7px 10px rgba(0,0,0,0.3);
+      font: 650 20px/1 var(--font-ui);
       cursor: pointer;
-      transition: background-color 130ms ease, transform 80ms ease;
       -webkit-tap-highlight-color: transparent;
+      transition: transform 70ms ease-out, box-shadow 70ms ease-out, filter 120ms ease-out;
+    }
+    button:hover { filter: brightness(1.04); }
+    button:active {
+      transform: translateY(3px);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.72) inset,
+        0 1px 0 #6f726c,
+        0 3px 5px rgba(0,0,0,0.28);
+    }
+    button:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
     }
 
-    button:hover { background: var(--key-hover); }
-    button:active { background: var(--key-active); transform: scale(0.97); }
-    button:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
-    .equals:focus-visible,
-    .sci-toggle[aria-pressed="true"]:focus-visible { outline-color: #ffffff; }
-
-    .utility { color: var(--muted); font-weight: 600; }
-
+    .utility { color: var(--key-muted); }
     .operator {
-      color: var(--text);
-      font-weight: 700;
-      background: linear-gradient(180deg, #232b38, var(--key));
+      border-color: #85999a;
+      background: linear-gradient(180deg, var(--operator-top), var(--operator));
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.85) inset,
+        0 4px 0 #718687,
+        0 7px 10px rgba(0,0,0,0.3);
     }
-    .operator:hover { background: var(--key-hover); }
 
     .sci-toggle {
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 15px;
-      letter-spacing: 0.04em;
+      border-color: #776354;
+      color: #30190c;
+      background: linear-gradient(180deg, #d9a77f, #bd7844);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.5) inset,
+        0 4px 0 #76513a,
+        0 7px 10px rgba(0,0,0,0.3);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.07em;
     }
-    .sci-toggle:hover { background: var(--key-hover); }
-    .sci-toggle[aria-pressed="true"] {
-      background: var(--accent-soft);
-      color: var(--accent-press);
+    .sci-toggle[aria-expanded="true"] {
+      color: #fff4e9;
+      background: linear-gradient(180deg, #d86824, #a43e0f);
     }
 
     .equals {
-      background: var(--accent);
-      color: #14160a;
+      border-color: #a44312;
+      color: #251005;
+      background: linear-gradient(180deg, #ff9f4b, var(--phosphor));
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.48) inset,
+        0 4px 0 #9d3c0f,
+        0 7px 12px rgba(89, 31, 5, 0.42);
+      font-size: 25px;
       font-weight: 800;
-      font-size: 26px;
     }
-    .equals:hover { background: var(--accent-press); }
+
+    .sci button {
+      min-height: 44px;
+      border-color: #0b0e0f;
+      border-radius: 6px;
+      color: #e4e9e5;
+      background: linear-gradient(180deg, #4a5354, #333a3b);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.13) inset, 0 3px 0 #121617;
+      font: 650 14px/1 var(--font-data);
+    }
 
     .zero { grid-column: span 2; }
 
-    .hint {
-      margin: 12px 4px 0;
-      color: #9aa6b6;
-      font-size: 11.5px;
+    .key-help {
+      margin: 12px 6px 0;
+      color: #454d4d;
+      font: 650 11px/1.4 var(--font-ui);
+      letter-spacing: 0.035em;
       text-align: center;
-      letter-spacing: 0.02em;
     }
 
-    @media (max-width: 420px) {
-      button { min-height: 64px; font-size: 20px; }
-      .calculator { border-radius: 18px; }
+    @media (max-width: 440px) {
+      body { display: block; padding-inline: 0; background-size: 16px 16px, 16px 16px, auto; }
+      main { width: 100%; }
+      .instrument { border-radius: 0; border-inline: 0; }
+      .identity { padding-inline: 27px; }
+      .display-wrap { padding: 15px 18px 17px; }
+      .keys { gap: 7px; padding: 14px 18px 20px; }
+      .sci-grid { gap: 6px; padding-inline: 18px; }
+      button { min-height: 55px; }
+      .key-help { padding-inline: 14px; }
+    }
+
+    @media (max-height: 850px) and (orientation: portrait) {
+      .instrument:has(.sci[data-open="true"]) .identity { min-height: 46px; padding-block: 9px 7px; }
+      .instrument:has(.sci[data-open="true"]) .display-wrap { padding-block: 10px 12px; }
+      .instrument:has(.sci[data-open="true"]) .display { min-height: 104px; padding-block: 14px 12px; }
+      .instrument:has(.sci[data-open="true"]) .sci-grid { gap: 5px; padding-block: 10px 12px; }
+      .instrument:has(.sci[data-open="true"]) .sci button { min-height: 44px; }
+      .instrument:has(.sci[data-open="true"]) .keys { gap: 6px; padding-block: 10px 14px; }
+      .instrument:has(.sci[data-open="true"]) .keys button { min-height: 48px; }
+      .instrument:has(.sci[data-open="true"]) + .key-help { display: none; }
+    }
+
+    @media (max-height: 730px) and (orientation: portrait) {
+      .identity { min-height: 46px; padding-block: 10px 8px; }
+      .display-wrap { padding-block: 12px 13px; }
+      .display { min-height: 108px; padding-block: 16px 13px; }
+      .keys { padding-block: 12px 17px; }
+      button { min-height: 50px; }
+      .key-help { display: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { transition: none !important; }
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
     }
   </style>
 </head>
 <body>
+  <!--
+  THESIS: SC-01 behaves like a calibrated bench instrument, rejecting the generic dark card calculator.
+  OWN-WORLD: drafting-bench grid, graphite metal enclosure, smoked cathode display, warm phosphor readout,
+  pale mechanical keycaps, restrained blue operator bank, visible fasteners and engraved labels.
+  STORY: A technical user immediately reads the current operation, confirms DEG mode, opens one scientific
+  function bank when needed, and completes the calculation through familiar tactile controls.
+  FIRST VIEWPORT: one physical instrument fills a phone width; identity rail, deep display aperture, collapsible
+  function bank, and four-column keypad form one continuous chassis. Equals is the sole solid orange action.
+  FORM: cathode numeral stack fused with creator-hardware key travel; seed c037784c.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict,
+  DESIGN.md, and every shipping raster carrying its provenance.
+  -->
   <main>
-    <section class="calculator" aria-label="Hesap makinesi">
-      <div class="display">
-        <div class="expression" data-expression aria-hidden="true"></div>
-        <output class="result" data-display data-error="false" aria-live="polite">0</output>
+    <section class="instrument" aria-label="SC-01 bilimsel hesap makinesi">
+      <i class="screw" aria-hidden="true"></i>
+      <i class="screw" aria-hidden="true"></i>
+      <i class="screw" aria-hidden="true"></i>
+      <i class="screw" aria-hidden="true"></i>
+
+      <header class="identity">
+        <div class="model">
+          <strong>SC-01</strong>
+          <span>Scientific calculator</span>
+        </div>
+        <div class="status"><span class="mode-light" aria-hidden="true"></span>DEG</div>
+      </header>
+
+      <div class="display-wrap">
+        <div class="display" role="status" aria-live="polite" aria-atomic="true">
+          <div class="expression" data-expression></div>
+          <output class="result" data-display data-error="false">0</output>
+        </div>
       </div>
 
-      <div class="sci" data-sci data-open="false">
-        <button class="sci-fn" data-key="sin" aria-label="Sinüs">sin</button>
-        <button class="sci-fn" data-key="cos" aria-label="Kosinüs">cos</button>
-        <button class="sci-fn" data-key="tan" aria-label="Tanjant">tan</button>
-        <button class="sci-fn" data-key="√" aria-label="Karekök">√</button>
-
-        <button class="sci-fn" data-key="log" aria-label="10 tabanında logaritma">log</button>
-        <button class="sci-fn" data-key="ln" aria-label="Doğal logaritma">ln</button>
-        <button class="sci-fn" data-key="x^y" aria-label="Üs alma">xʸ</button>
-        <button class="sci-fn" data-key="π" aria-label="Pi sayısı">π</button>
-
-        <button class="sci-fn" data-key="e" aria-label="Euler sayısı">e</button>
-        <button class="sci-fn" data-key="%" aria-label="Yüzde">%</button>
-        <button class="sci-fn" data-key="±" aria-label="İşaret değiştir">±</button>
-        <button class="sci-toggle" data-key="SCI" aria-label="Bilimsel modu kapat" aria-pressed="true">SCI✕</button>
+      <div class="function-bank">
+        <div class="sci" id="scientific-functions" data-sci data-open="false" inert>
+          <div class="sci-grid">
+            <button data-key="sin" aria-label="Sinüs">sin</button>
+            <button data-key="cos" aria-label="Kosinüs">cos</button>
+            <button data-key="tan" aria-label="Tanjant">tan</button>
+            <button data-key="√" aria-label="Karekök">√</button>
+            <button data-key="log" aria-label="10 tabanında logaritma">log</button>
+            <button data-key="ln" aria-label="Doğal logaritma">ln</button>
+            <button data-key="x^y" aria-label="Üs alma">xʸ</button>
+            <button data-key="π" aria-label="Pi sayısı">π</button>
+            <button data-key="e" aria-label="Euler sayısı">e</button>
+            <button data-key="%" aria-label="Yüzde">%</button>
+            <button data-key="±" aria-label="İşaret değiştir">±</button>
+          </div>
+        </div>
       </div>
 
       <div class="keys" data-keys>
-        <button class="sci-toggle" data-key="SCI" aria-label="Bilimsel modu aç" aria-pressed="false">SCI</button>
+        <button class="sci-toggle" data-key="SCI" aria-label="Bilimsel işlevleri göster veya gizle" aria-controls="scientific-functions" aria-expanded="false">SCI</button>
         <button class="utility" data-key="C" aria-label="Temizle">C</button>
         <button class="utility" data-key="⌫" aria-label="Son basamağı sil">⌫</button>
         <button class="operator" data-key="÷" aria-label="Böl">÷</button>
@@ -255,7 +466,7 @@
         <button class="equals" data-key="=" aria-label="Sonucu göster">=</button>
       </div>
     </section>
-    <p class="hint">Klavye desteklenir · Esc temizler · SCI bilimsel mod</p>
+    <p class="key-help">Klavye aktif · Esc temizler · İşlemler derece cinsindendir</p>
   </main>
   <script src="./calculator.js"></script>
 </body>

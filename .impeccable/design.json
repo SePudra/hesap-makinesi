@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-16T16:09:27+03:00",
+  "title": "Design System: SC-01 Scientific Calculator",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Phosphor Orange" },
+      "drafting-bench": { "role": "neutral", "displayName": "Drafting Bench" },
+      "drafting-grid": { "role": "neutral", "displayName": "Drafting Grid" },
+      "graphite-shell": { "role": "neutral", "displayName": "Graphite Shell" },
+      "shell-edge": { "role": "neutral", "displayName": "Shell Edge" },
+      "graphite-panel": { "role": "neutral", "displayName": "Graphite Panel" },
+      "graphite-panel-high": { "role": "neutral", "displayName": "Graphite Panel High" },
+      "smoked-screen": { "role": "neutral", "displayName": "Smoked Screen" },
+      "screen-edge": { "role": "neutral", "displayName": "Screen Edge" },
+      "phosphor-orange": { "role": "primary", "displayName": "Phosphor Orange" },
+      "phosphor-bright": { "role": "primary", "displayName": "Bright Phosphor" },
+      "phosphor-dim": { "role": "primary", "displayName": "Dim Phosphor" },
+      "phosphor-ghost": { "role": "primary", "displayName": "Ghost Phosphor" },
+      "instrument-ink": { "role": "neutral", "displayName": "Instrument Ink" },
+      "instrument-ink-muted": { "role": "neutral", "displayName": "Muted Instrument Ink" },
+      "keycap": { "role": "neutral", "displayName": "Pale Keycap" },
+      "keycap-top": { "role": "neutral", "displayName": "Keycap Top Plane" },
+      "keycap-ink": { "role": "neutral", "displayName": "Keycap Ink" },
+      "keycap-muted": { "role": "neutral", "displayName": "Muted Keycap Ink" },
+      "operator-cool": { "role": "secondary", "displayName": "Cool Operator" },
+      "operator-cool-top": { "role": "secondary", "displayName": "Cool Operator Top" },
+      "divider": { "role": "neutral", "displayName": "Instrument Divider" },
+      "focus-blue": { "role": "secondary", "displayName": "Focus Blue" },
+      "error-red": { "role": "tertiary", "displayName": "Error Red" },
+      "science-brass": { "role": "secondary", "displayName": "Science Brass" },
+      "science-brass-top": { "role": "secondary", "displayName": "Science Brass Top" },
+      "science-active": { "role": "primary", "displayName": "Active Science Orange" },
+      "science-active-top": { "role": "primary", "displayName": "Active Science Top" }
+    },
+    "shadows": [
+      { "name": "chassis", "value": "0 2px 0 rgba(255,255,255,0.12) inset, 0 -2px 0 rgba(0,0,0,0.32) inset, 0 24px 54px -20px rgba(24, 28, 28, 0.48)", "purpose": "Metal edge definition and ambient bench anchoring." },
+      { "name": "fastener", "value": "0 1px 1px rgba(0,0,0,0.6)", "purpose": "Seats each visible screw in the chassis." },
+      { "name": "mode-lamp-rest", "value": "0 0 0 1px #121515", "purpose": "Defines the unlit DEG mode lamp." },
+      { "name": "mode-lamp-active", "value": "0 0 0 1px #121515, 0 0 10px rgba(255, 122, 26, 0.7)", "purpose": "Illuminates the DEG mode lamp while SCI is open." },
+      { "name": "cathode-recess", "value": "0 0 0 2px rgba(255,255,255,0.055), 0 5px 13px rgba(0,0,0,0.82) inset", "purpose": "Cuts the smoked display aperture into the shell." },
+      { "name": "cathode-result", "value": "0 2px 9px rgba(255, 96, 12, 0.62)", "purpose": "Gives the live result its phosphor glow." },
+      { "name": "cathode-error", "value": "0 2px 9px rgba(255, 65, 65, 0.42)", "purpose": "Separates an error readout from the normal phosphor state." },
+      { "name": "key-rest", "value": "0 1px 0 rgba(255,255,255,0.9) inset, 0 4px 0 #777a73, 0 7px 10px rgba(0,0,0,0.3)", "purpose": "Establishes the pale mechanical key top and four-pixel travel." },
+      { "name": "key-active", "value": "0 1px 0 rgba(255,255,255,0.72) inset, 0 1px 0 #6f726c, 0 3px 5px rgba(0,0,0,0.28)", "purpose": "Collapses key travel after a three-pixel press." },
+      { "name": "operator-rest", "value": "0 1px 0 rgba(255,255,255,0.85) inset, 0 4px 0 #718687, 0 7px 10px rgba(0,0,0,0.3)", "purpose": "Preserves mechanical depth on the cool operator bank." },
+      { "name": "science-toggle-rest", "value": "0 1px 0 rgba(255,255,255,0.5) inset, 0 4px 0 #76513a, 0 7px 10px rgba(0,0,0,0.3)", "purpose": "Preserves mechanical depth on the SCI toggle." },
+      { "name": "equals-rest", "value": "0 1px 0 rgba(255,255,255,0.48) inset, 0 4px 0 #9d3c0f, 0 7px 12px rgba(89, 31, 5, 0.42)", "purpose": "Gives equals its warm mechanical base." },
+      { "name": "science-key-rest", "value": "0 1px 0 rgba(255,255,255,0.13) inset, 0 3px 0 #121617", "purpose": "Defines compact travel inside the scientific bank." }
+    ],
+    "motion": [
+      { "name": "key-travel", "value": "70ms ease-out", "purpose": "Key transform and shadow response." },
+      { "name": "key-hover", "value": "120ms ease-out", "purpose": "Key brightness response." },
+      { "name": "mode-lamp", "value": "180ms ease-out", "purpose": "Mode lamp background and halo response." },
+      { "name": "science-bank-rows", "value": "220ms cubic-bezier(.2,.8,.2,1)", "purpose": "Scientific bank row expansion and collapse." },
+      { "name": "science-bank-opacity", "value": "160ms ease-out", "purpose": "Scientific bank visibility response." },
+      { "name": "reduced-motion", "value": "0.01ms", "purpose": "Forced transition duration under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "narrow-width", "value": "max-width: 440px" },
+      { "name": "compact-portrait", "value": "max-height: 850px and orientation: portrait" },
+      { "name": "short-portrait", "value": "max-height: 730px and orientation: portrait" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Mechanical Key",
+      "kind": "button",
+      "refersTo": "key",
+      "description": "The implemented pale numeric key with short mechanical travel.",
+      "html": "<button class=\"ds-key\" type=\"button\">7</button>",
+      "css": ".ds-key { min-height:58px; margin:0; border:1px solid #96988f; border-radius:8px; color:#202526; background:linear-gradient(180deg,#f6f4ed,#e3e0d7); box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 0 #777a73,0 7px 10px rgba(0,0,0,.3); font:650 20px/1 \"DIN Alternate\",\"Bahnschrift\",\"Aptos\",system-ui,sans-serif; cursor:pointer; transition:transform 70ms ease-out,box-shadow 70ms ease-out,filter 120ms ease-out; } .ds-key:hover { filter:brightness(1.04); } .ds-key:focus-visible { outline:3px solid #74c7ff; outline-offset:3px; } .ds-key:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(255,255,255,.72) inset,0 1px 0 #6f726c,0 3px 5px rgba(0,0,0,.28); }"
+    },
+    {
+      "name": "Operator Key",
+      "kind": "button",
+      "refersTo": "key-operator",
+      "description": "The implemented cool blue-gray arithmetic operator key.",
+      "html": "<button class=\"ds-key-operator\" type=\"button\" aria-label=\"Add\">+</button>",
+      "css": ".ds-key-operator { min-height:58px; margin:0; border:1px solid #85999a; border-radius:8px; color:#202526; background:linear-gradient(180deg,#e1eded,#c6d7d7); box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 4px 0 #718687,0 7px 10px rgba(0,0,0,.3); font:650 20px/1 \"DIN Alternate\",\"Bahnschrift\",\"Aptos\",system-ui,sans-serif; cursor:pointer; transition:transform 70ms ease-out,box-shadow 70ms ease-out,filter 120ms ease-out; } .ds-key-operator:hover { filter:brightness(1.04); } .ds-key-operator:focus-visible { outline:3px solid #74c7ff; outline-offset:3px; } .ds-key-operator:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(255,255,255,.72) inset,0 1px 0 #6f726c,0 3px 5px rgba(0,0,0,.28); }"
+    },
+    {
+      "name": "Equals Key",
+      "kind": "button",
+      "refersTo": "key-equals",
+      "description": "The implemented phosphor-orange completion action.",
+      "html": "<button class=\"ds-key-equals\" type=\"button\" aria-label=\"Show result\">=</button>",
+      "css": ".ds-key-equals { min-height:58px; margin:0; border:1px solid #a44312; border-radius:8px; color:#251005; background:linear-gradient(180deg,#ff9f4b,#ff7a1a); box-shadow:0 1px 0 rgba(255,255,255,.48) inset,0 4px 0 #9d3c0f,0 7px 12px rgba(89,31,5,.42); font:800 25px/1 \"DIN Alternate\",\"Bahnschrift\",\"Aptos\",system-ui,sans-serif; cursor:pointer; transition:transform 70ms ease-out,box-shadow 70ms ease-out,filter 120ms ease-out; } .ds-key-equals:hover { filter:brightness(1.04); } .ds-key-equals:focus-visible { outline:3px solid #74c7ff; outline-offset:3px; } .ds-key-equals:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(255,255,255,.72) inset,0 1px 0 #6f726c,0 3px 5px rgba(0,0,0,.28); }"
+    },
+    {
+      "name": "SCI Toggle",
+      "kind": "button",
+      "refersTo": "key-science-toggle",
+      "description": "The implemented scientific-bank toggle in closed and expanded states.",
+      "html": "<button class=\"ds-sci-toggle\" type=\"button\" aria-expanded=\"false\">SCI</button>",
+      "css": ".ds-sci-toggle { min-height:58px; margin:0; border:1px solid #776354; border-radius:8px; color:#30190c; background:linear-gradient(180deg,#d9a77f,#bd7844); box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 4px 0 #76513a,0 7px 10px rgba(0,0,0,.3); font:800 13px/1 \"DIN Alternate\",\"Bahnschrift\",\"Aptos\",system-ui,sans-serif; letter-spacing:.07em; cursor:pointer; transition:transform 70ms ease-out,box-shadow 70ms ease-out,filter 120ms ease-out; } .ds-sci-toggle[aria-expanded=\"true\"] { color:#fff4e9; background:linear-gradient(180deg,#d86824,#a43e0f); } .ds-sci-toggle:hover { filter:brightness(1.04); } .ds-sci-toggle:focus-visible { outline:3px solid #74c7ff; outline-offset:3px; } .ds-sci-toggle:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(255,255,255,.72) inset,0 1px 0 #6f726c,0 3px 5px rgba(0,0,0,.28); }"
+    },
+    {
+      "name": "Cathode Display",
+      "kind": "custom",
+      "refersTo": "cathode-display",
+      "description": "The implemented recessed smoked aperture with expression, ghost segments, and phosphor result.",
+      "html": "<div class=\"ds-cathode-display\" role=\"status\" aria-live=\"polite\"><div class=\"ds-cathode-expression\">12 × 8</div><output class=\"ds-cathode-result\">96</output></div>",
+      "css": ".ds-cathode-display { position:relative; min-height:128px; overflow:hidden; border:1px solid #050504; border-radius:9px; padding:21px 19px 17px; text-align:right; background:repeating-linear-gradient(90deg,transparent 0 5px,rgba(180,109,45,.035) 5px 6px),linear-gradient(180deg,#080806,#100f0c); box-shadow:0 0 0 2px rgba(255,255,255,.055),0 5px 13px rgba(0,0,0,.82) inset; } .ds-cathode-display::before { content:\"888888888888\"; position:absolute; right:18px; bottom:16px; color:rgba(255,122,26,.1); font:500 clamp(38px,12vw,58px)/1 \"SFMono-Regular\",\"Cascadia Mono\",\"Roboto Mono\",ui-monospace,monospace; letter-spacing:-.045em; white-space:nowrap; pointer-events:none; } .ds-cathode-expression { position:relative; z-index:1; min-height:21px; margin-bottom:9px; overflow:hidden; color:#c45a1f; font:500 14px/1.2 \"SFMono-Regular\",\"Cascadia Mono\",\"Roboto Mono\",ui-monospace,monospace; letter-spacing:.02em; text-overflow:ellipsis; white-space:nowrap; } .ds-cathode-result { position:relative; z-index:1; display:block; min-height:58px; overflow-x:auto; overflow-y:hidden; color:#ff9a43; font:500 clamp(38px,12vw,58px)/1 \"SFMono-Regular\",\"Cascadia Mono\",\"Roboto Mono\",ui-monospace,monospace; font-variant-numeric:tabular-nums; letter-spacing:-.045em; text-shadow:0 2px 9px rgba(255,96,12,.62); white-space:nowrap; } .ds-cathode-display:focus-within { outline:3px solid #74c7ff; outline-offset:3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Calibrated Bench Instrument",
+    "overview": "SC-01 is treated as a physical measurement instrument resting on a pale drafting bench, not as a generic dark calculator card. A graphite chassis, visible fasteners, engraved-feeling labels, and a smoked cathode aperture establish a professional, academic engineering character.\n\nThe visual hierarchy follows the working sequence of the instrument: identify the model and DEG state, read the warm phosphor result, reveal the scientific bank only when needed, then operate the tactile four-column keypad. The measurement grid and cathode glow are justified by that world; neither is free-floating decoration.",
+    "keyCharacteristics": [
+      "Pale drafting bench with a measured grid.",
+      "Graphite enclosure with structural edge, inset, and fastener detail.",
+      "Smoked cathode aperture with a phosphor-orange numeric result.",
+      "Cool operator bank separated from pale mechanical keycaps.",
+      "Short, visible mechanical key travel.",
+      "Orange reserved for live instrument state and decisive calculation."
+    ],
+    "rules": [
+      { "name": "The Rare Orange Rule", "body": "Orange is reserved for the result, active instrument state, selection, and equals action; it must not become broad surface decoration.", "section": "colors" },
+      { "name": "The Instrument Color Rule", "body": "Every color must read as bench, chassis, aperture, key material, status, focus, or error—not as an unrelated brand flourish.", "section": "colors" },
+      { "name": "The Data Face Rule", "body": "Values, formulas, scientific keys, and model markings use the monospaced data stack; operational labels and primary keypad legends use the technical UI stack.", "section": "typography" },
+      { "name": "The Structural Depth Rule", "body": "Shadows must explain enclosure, recess, illumination, or mechanical travel; do not add floating-card elevation.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do preserve the continuous identity rail, recessed display, optional function bank, and four-column keypad hierarchy.",
+      "Do use orange only for functional energy: live result, active state, selection, and equals.",
+      "Do keep operator keys cool, numeric keys pale, and scientific keys graphite.",
+      "Do preserve visible focus, touch targets, keyboard parity, safe-area spacing, and the reduced-motion path.",
+      "Do let the measurement grid and cathode glow remain justified by the bench-instrument world."
+    ],
+    "donts": [
+      "Don't return to the discarded yellow theme or turn the interface playful.",
+      "Don't use orange as a broad chassis, bench, or decorative background.",
+      "Don't replace mechanical key travel with flat generic buttons or floating-card motion.",
+      "Don't add ornamental effects that cannot be read as measurement, material, illumination, or operation.",
+      "Don't introduce external imagery, logos, testimonials, or commercial claims."
+    ]
+  }
+}

@@ -144,7 +144,8 @@ if (typeof document !== 'undefined') {
 
   const setSci = (open) => {
     sci.dataset.open = String(open);
-    sciToggles.forEach((t) => t.setAttribute('aria-pressed', String(open)));
+    sci.inert = !open;
+    sciToggles.forEach((t) => t.setAttribute('aria-expanded', String(open)));
   };
 
   const handle = (key) => {
