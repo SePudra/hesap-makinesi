@@ -2,125 +2,210 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Hesap Makinesi</title>
   <style>
     :root {
       color-scheme: dark;
-      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-      background: #1a1407;
-      color: #fdf6e3;
+      --bg: #0b0d12;
+      --bg-glow: #141821;
+      --panel: #151922;
+      --panel-2: #1b212d;
+      --key: #1e2531;
+      --key-hover: #283041;
+      --key-active: #323c4f;
+      --line: #2a3340;
+      --text: #f4f7fb;
+      --muted: #8b97a8;
+      --accent: #f5c518;
+      --accent-soft: #f5c51822;
+      --accent-press: #ffd84d;
+      --operator: #ffb454;
+      --danger: #ff6b6b;
+      --radius: 22px;
+      --font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     }
 
     * { box-sizing: border-box; }
 
+    html, body { height: 100%; }
+
     body {
-      min-height: 100vh;
       margin: 0;
       display: grid;
       place-items: center;
-      padding: 24px;
-      background-color: #1a1407;
-      background-image: radial-gradient(#3a2e10 0.7px, transparent 0.7px);
-      background-size: 18px 18px;
-    }
-
-    main {
-      width: min(100%, 360px);
+      padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 50% -10%, var(--bg-glow), transparent 60%),
+        radial-gradient(800px 500px at 90% 110%, #1a1407, transparent 55%),
+        var(--bg);
+      -webkit-font-smoothing: antialiased;
     }
 
     .calculator {
+      width: min(100%, 380px);
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.04) inset,
+        0 30px 80px -20px rgba(0,0,0,0.75);
       overflow: hidden;
-      border: 1px solid #5c4a12;
-      border-radius: 24px;
-      background: #221a08;
-      box-shadow: 0 24px 70px rgb(0 0 0 / 45%);
     }
 
     .display {
-      min-height: 128px;
-      display: flex;
-      align-items: end;
-      justify-content: end;
-      overflow: hidden;
-      padding: 28px 24px 22px;
-      border-bottom: 1px solid #5c4a12;
-      font-size: clamp(42px, 13vw, 62px);
-      font-weight: 520;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.055em;
+      padding: 26px 24px 18px;
+      text-align: right;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(245,197,24,0.05), transparent);
+    }
+
+    .expression {
+      min-height: 20px;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 15px;
+      letter-spacing: 0.02em;
       white-space: nowrap;
-      color: #fde047;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .display[data-error="true"] {
-      color: #fca5a5;
-      font-size: 25px;
-      letter-spacing: -0.02em;
+    .result {
+      min-height: 64px;
+      font-size: clamp(40px, 12vw, 60px);
+      font-weight: 600;
+      line-height: 1.05;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .keys {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: #5c4a12;
+    .result[data-error="true"] {
+      color: var(--danger);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0;
+      word-break: break-all;
     }
 
-    .sci[hidden] { display: none; }
+    .expression:empty { min-height: 0; margin: 0; }
 
     .sci {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1px;
-      background: #5c4a12;
-      border-bottom: 1px solid #5c4a12;
+      background: var(--line);
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 240ms ease, opacity 200ms ease;
+    }
+
+    .sci[data-open="true"] {
+      max-height: 340px;
+      opacity: 1;
+    }
+
+    .sci button {
+      background: #181f2b;
+      color: var(--operator);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .sci button:hover { background: #202938; }
+
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
     }
 
     button {
-      min-height: 70px;
+      appearance: none;
       border: 0;
-      background: #2e2409;
-      color: #fdf6e3;
+      margin: 0;
+      min-height: 68px;
+      background: var(--key);
+      color: var(--text);
       font: inherit;
-      font-size: 21px;
+      font-size: 22px;
+      font-weight: 500;
       cursor: pointer;
-      transition: background-color 120ms ease, color 120ms ease;
+      transition: background-color 130ms ease, transform 80ms ease;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    button:hover { background: #3d3010; }
-    button:active { background: #4d3d14; }
-    button:focus-visible { outline: 3px solid #fde047; outline-offset: -4px; }
+    button:hover { background: var(--key-hover); }
+    button:active { background: var(--key-active); transform: scale(0.97); }
+    button:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
 
-    .utility { color: #d4c089; }
-    .operator { color: #fde047; font-weight: 700; }
-    .sci-fn { color: #fcd34d; font-size: 18px; }
-    .equals { grid-row: span 2; background: #fde047; color: #1a1407; font-weight: 800; }
-    .equals:hover { background: #fef08a; }
+    .utility { color: var(--muted); font-weight: 600; }
+
+    .operator {
+      color: var(--operator);
+      font-weight: 700;
+      background: linear-gradient(180deg, #2a2113, var(--key));
+    }
+    .operator:hover { background: var(--key-hover); }
+
+    .sci-toggle {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.04em;
+    }
+    .sci-toggle:hover { background: var(--key-hover); }
+    .sci-toggle[aria-pressed="true"] {
+      background: var(--accent-soft);
+      color: var(--accent-press);
+    }
+
+    .equals {
+      grid-row: span 2;
+      background: var(--accent);
+      color: #14160a;
+      font-weight: 800;
+      font-size: 26px;
+    }
+    .equals:hover { background: var(--accent-press); }
+
     .zero { grid-column: span 2; }
 
     .hint {
-      margin: 14px 2px 0;
-      color: #a8924a;
-      font-size: 12px;
+      margin: 12px 4px 0;
+      color: #5d6776;
+      font-size: 11.5px;
       text-align: center;
+      letter-spacing: 0.02em;
     }
 
     @media (max-width: 420px) {
-      body { padding: 16px; }
-      .calculator { border-radius: 20px; }
-      button { min-height: 66px; }
+      button { min-height: 64px; font-size: 20px; }
+      .calculator { border-radius: 18px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      button { transition: none; }
+      *, *::before, *::after { transition: none !important; }
     }
   </style>
 </head>
 <body>
   <main>
     <section class="calculator" aria-label="Hesap makinesi">
-      <output class="display" data-display data-error="false" aria-live="polite">0</output>
-      <div class="sci" data-sci hidden>
+      <div class="display">
+        <div class="expression" data-expression aria-hidden="true"></div>
+        <output class="result" data-display data-error="false" aria-live="polite">0</output>
+      </div>
+
+      <div class="sci" data-sci data-open="false">
         <button class="sci-fn" data-key="sin" aria-label="Sinüs">sin</button>
         <button class="sci-fn" data-key="cos" aria-label="Kosinüs">cos</button>
         <button class="sci-fn" data-key="tan" aria-label="Tanjant">tan</button>
@@ -134,12 +219,13 @@
         <button class="sci-fn" data-key="e" aria-label="Euler sayısı">e</button>
         <button class="sci-fn" data-key="%" aria-label="Yüzde">%</button>
         <button class="sci-fn" data-key="±" aria-label="İşaret değiştir">±</button>
-        <button class="sci-fn" data-key="SCI" aria-label="Bilimsel modu kapat">SCI✕</button>
+        <button class="sci-toggle" data-key="SCI" aria-label="Bilimsel modu kapat" aria-pressed="true">SCI✕</button>
       </div>
+
       <div class="keys" data-keys>
-        <button class="utility" data-key="SCI" aria-label="Bilimsel modu aç">SCI</button>
+        <button class="sci-toggle" data-key="SCI" aria-label="Bilimsel modu aç" aria-pressed="false">SCI</button>
         <button class="utility" data-key="C" aria-label="Temizle">C</button>
-        <button class="utility" data-key="⌫" aria-label="Son basamağı sil">←</button>
+        <button class="utility" data-key="⌫" aria-label="Son basamağı sil">⌫</button>
         <button class="operator" data-key="÷" aria-label="Böl">÷</button>
 
         <button data-key="7">7</button>

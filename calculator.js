@@ -20,12 +20,12 @@ const initialState = Object.freeze({
   operator: null,
   waiting: false,
   error: false,
+  expression: '',
 });
 
 const operators = new Set(['+', '-', '×', '÷', 'x^y']);
 const format = (value) => String(Number(Number(value).toPrecision(12)));
 
-// Unary scientific functions applied to the current display value.
 function applyFn(key, state) {
   const x = Number(state.display);
   if (!Number.isFinite(x)) throw new Error('Geçersiz sayı');
@@ -62,7 +62,7 @@ function press(state, key) {
   if (key === '±' || key === 'π' || key === 'e') {
     try {
       const display = format(applyFn(key, state));
-      return { ...state, display, waiting: false, error: false };
+      return { ...state, display, expression: '', waiting: false, error: false };
     } catch (error) {
       return { ...initialState, display: error.message, waiting: true, error: true };
     }
@@ -70,8 +70,9 @@ function press(state, key) {
 
   if (['sin', 'cos', 'tan', '√', 'log', 'ln', '%'].includes(key)) {
     try {
-      const display = format(applyFn(key, { ...state, display: state.waiting ? (state.first ?? 0) : state.display }));
-      return { ...state, display, waiting: false, error: false };
+      const operand = state.waiting ? (state.first ?? 0) : state.display;
+      const display = format(applyFn(key, { ...state, display: operand }));
+      return { ...state, display, expression: '', waiting: false, error: false };
     } catch (error) {
       return { ...initialState, display: error.message, waiting: true, error: true };
     }
@@ -94,7 +95,15 @@ function press(state, key) {
       const display = state.operator && !state.waiting
         ? format(calculate(state.first, state.operator, state.display))
         : state.display;
-      return { display, first: Number(display), operator: key, waiting: true, error: false };
+      const label = key === 'x^y' ? '^' : key;
+      return {
+        display,
+        first: Number(display),
+        operator: key,
+        waiting: true,
+        error: false,
+        expression: `${display} ${label}`,
+      };
     } catch (error) {
       return { ...initialState, display: error.message, waiting: true, error: true };
     }
@@ -102,10 +111,12 @@ function press(state, key) {
 
   if (key === '=' && state.operator && !state.waiting) {
     try {
+      const result = format(calculate(state.first, state.operator, state.display));
       return {
         ...initialState,
-        display: format(calculate(state.first, state.operator, state.display)),
+        display: result,
         waiting: true,
+        expression: `${state.expression} ${state.display} =`,
       };
     } catch (error) {
       return { ...initialState, display: error.message, waiting: true, error: true };
@@ -119,20 +130,25 @@ if (typeof module !== 'undefined') module.exports = { calculate, initialState, p
 
 if (typeof document !== 'undefined') {
   const display = document.querySelector('[data-display]');
+  const expression = document.querySelector('[data-expression]');
   const keys = document.querySelector('[data-keys]');
   const sci = document.querySelector('[data-sci]');
+  const sciToggles = document.querySelectorAll('[data-key="SCI"]');
   let state = { ...initialState };
 
   const render = () => {
     display.textContent = state.display;
     display.dataset.error = String(state.error);
+    expression.textContent = state.expression;
+  };
+
+  const setSci = (open) => {
+    sci.dataset.open = String(open);
+    sciToggles.forEach((t) => t.setAttribute('aria-pressed', String(open)));
   };
 
   const handle = (key) => {
-    if (key === 'SCI') {
-      sci.hidden = !sci.hidden;
-      return;
-    }
+    if (key === 'SCI') { setSci(sci.dataset.open !== 'true'); return; }
     state = press(state, key);
     render();
   };
