@@ -1,6 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { calculate, initialState, press } from './calculator.mjs';
+import { readFileSync } from 'node:fs';
+import calculator from './calculator.js';
+
+const { calculate, initialState, press } = calculator;
+
+test('index.html doğrudan dosya olarak açılabilir', () => {
+  const html = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
+  assert.match(html, /<script src="\.\/calculator\.js"><\/script>/);
+  assert.doesNotMatch(html, /type="module"/);
+});
 
 test('iki sayıyı toplar', () => {
   assert.equal(calculate(2, '+', 3), 5);

@@ -1,4 +1,4 @@
-export function calculate(left, operator, right) {
+function calculate(left, operator, right) {
   const a = Number(left);
   const b = Number(right);
 
@@ -13,7 +13,7 @@ export function calculate(left, operator, right) {
   throw new Error('Desteklenmeyen işlem');
 }
 
-export const initialState = Object.freeze({
+const initialState = Object.freeze({
   display: '0',
   first: null,
   operator: null,
@@ -24,7 +24,7 @@ export const initialState = Object.freeze({
 const operators = new Set(['+', '-', '×', '÷']);
 const format = (value) => String(Number(Number(value).toPrecision(12)));
 
-export function press(state, key) {
+function press(state, key) {
   if (key === 'C') return { ...initialState };
 
   if (key === '⌫') {
@@ -69,6 +69,8 @@ export function press(state, key) {
 
   return state;
 }
+
+if (typeof module !== 'undefined') module.exports = { calculate, initialState, press };
 
 if (typeof document !== 'undefined') {
   const display = document.querySelector('[data-display]');
